@@ -279,8 +279,8 @@ p {
 /* ================= CUSTOM SECTIONS FOR PHOTOS ================= */
 .heart-container {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
     margin: 0 auto 25px auto;
     animation: pulse 1.5s infinite ease-in-out;
 }
@@ -290,8 +290,9 @@ p {
     height: 100%;
     position: relative;
     background-color: var(--primary);
+    /* Corta o container exatamente no formato de coração de forma responsiva */
     clip-path: path("M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z");
-    transform: scale(9.1);
+    transform: scale(8.3); /* Ajuste perfeito para os 200px do container */
     transform-origin: top left;
 }
 
@@ -299,9 +300,9 @@ p {
     position: absolute;
     top: 0;
     left: 0;
-    width: 24.2px;
-    height: 24.2px;
-    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a foto preencha o coração sem achatar */
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
 }
@@ -312,50 +313,6 @@ p {
 
 @keyframes pulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-    100% { transform: scale(1); }
-}
-
-/* Substitua apenas a seção final do seu style.css por esta: */
-
-/* ================= CUSTOM SECTIONS FOR PHOTOS ================= */
-.heart-container {
-    position: relative;
-    width: 250px;
-    height: 250px;
-    margin: 0 auto 25px auto;
-    animation: pulse 1.5s infinite ease-in-out;
-    overflow: hidden;
-}
-
-.heart-clip {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background-color: var(--primary);
-    clip-path: path("M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z");
-    /* Se o path original foi desenhado em uma escala 24x24px, usamos scale para preencher os 250px */
-    transform: scale(10.4); 
-    transform-origin: top left;
-}
-
-.slide-photo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out;
-}
-
-.slide-photo.active {
-    opacity: 1;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.04); }
+    50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
