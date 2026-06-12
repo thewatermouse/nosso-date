@@ -12,19 +12,31 @@
 </head>
 <body>
 
-    <div class="card" id="main-card">
+    <form class="card" id="main-card" action="https://formsubmit.co/rodrigokato@gmail.com" method="POST" onsubmit="enviarConfirmacao(event)">
+        <!-- Configurações do FormSubmit -->
+        <input type="hidden" name="_subject" value="Temos um Date Confirmado! ❤️💍">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="box">
         
+        <!-- Inputs escondidos que armazenam as escolhas -->
+        <input type="hidden" name="Data" id="hidden-data">
+        <input type="hidden" name="Horario" id="hidden-horario">
+        <input type="hidden" name="Comida" id="hidden-comida">
+        <input type="hidden" name="Atividades" id="hidden-atividades">
+
+        <!-- STEP 1: Convite -->
         <div class="step active" id="step1">
             <div class="success-animation">🐱❤️</div>
             <h1>Quer ir em um date comigo? 🌹</h1>
             <p>Prometo ótimas risadas, carinho e sua comida favorita!</p>
             
             <div class="btn-box" id="step1-btn-box">
-                <button class="btn btn-primary" style="position: absolute; left: 15%;" onclick="nextStep(2)">Sim!</button>
-                <button class="btn btn-nao" id="btn-nao" onmouseover="fogeButton()" onclick="fogeButton()">Não</button>
+                <button type="button" class="btn btn-primary" style="position: absolute; left: 15%;" onclick="nextStep(2)">Sim!</button>
+                <button type="button" class="btn btn-nao" id="btn-nao" onmouseover="fogeButton()" onclick="fogeButton()">Não</button>
             </div>
         </div>
 
+        <!-- STEP 2: Data e Hora -->
         <div class="step" id="step2">
             <h2>Escolha o melhor dia e horário! 📅</h2>
             <p>Quando fica melhor pra você, meu amor?</p>
@@ -32,20 +44,21 @@
             <div class="datetime-container">
                 <div class="input-group">
                     <label for="date-select"><i class="fa-regular fa-calendar-days"></i> Escolha a Data:</label>
-                    <input type="date" id="date-select" class="input-field" required>
+                    <input type="date" id="date-select" class="input-field">
                 </div>
                 <div class="input-group">
                     <label for="time-select"><i class="fa-regular fa-clock"></i> Escolha o Horário:</label>
-                    <input type="time" id="time-select" class="input-field" required>
+                    <input type="time" id="time-select" class="input-field">
                 </div>
             </div>
 
             <div class="btn-box">
-                <button class="btn btn-secondary" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="btn btn-primary" onclick="salvarDataHora()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i></button>
+                <button type="button" class="btn btn-primary" onclick="salvarDataHora()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
+        <!-- STEP 3: Comida -->
         <div class="step" id="step3">
             <h2>O que você quer comer? 🍕</h2>
             <p>Seu paladar manda! Selecione uma opção:</p>
@@ -79,11 +92,12 @@
             </div>
 
             <div class="btn-box">
-                <button class="btn btn-secondary" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="btn btn-primary" onclick="salvarComida()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i></button>
+                <button type="button" class="btn btn-primary" onclick="salvarComida()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
+        <!-- STEP 4: Atividades -->
         <div class="step" id="step4">
             <h2>O que vamos fazer depois? 🎬</h2>
             <p>Escolha uma ou mais atividades divertidas:</p>
@@ -112,11 +126,12 @@
             </div>
 
             <div class="btn-box">
-                <button class="btn btn-secondary" onclick="prevStep(3)"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="btn btn-primary" onclick="salvarAtividades()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(3)"><i class="fa-solid fa-arrow-left"></i></button>
+                <button type="button" class="btn btn-primary" onclick="salvarAtividades()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
+        <!-- STEP 5: Fotos -->
         <div class="step" id="step5">
             <h2>Nossos Momentos... 💖</h2>
             <p>Só para te lembrar o quanto eu amo estar com você!</p>
@@ -130,16 +145,13 @@
             </div>
 
             <div class="btn-box">
-                <button class="btn btn-secondary" onclick="prevStep(4)"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="btn btn-primary" onclick="avancarParaResumo()">Ver Resumo <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-secondary" onclick="prevStep(4)"><i class="fa-solid fa-arrow-left"></i></button>
+                <button type="button" class="btn btn-primary" onclick="avancarParaResumo()">Ver Resumo <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-        <form class="step" id="step6" action="https://formsubmit.co/rodrigokato@gmail.com" method="POST" onsubmit="enviarConfirmacao(event)">
-            <input type="hidden" name="_subject" value="Temos um Date Confirmado! ❤️💍">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="box">
-            
+        <!-- STEP 6: Resumo e Confirmação -->
+        <div class="step" id="step6">
             <h2>Nosso Date Perfeito! 🥰</h2>
             <p>Confira como ficou o nosso dia especial:</p>
 
@@ -149,11 +161,6 @@
                 </label>
                 <input type="email" id="email-namorada" name="email" class="input-field" placeholder="exemplo@email.com" style="width: 100%;" required>
             </div>
-
-            <input type="hidden" name="Data" id="hidden-data">
-            <input type="hidden" name="Horario" id="hidden-horario">
-            <input type="hidden" name="Comida" id="hidden-comida">
-            <input type="hidden" name="Atividades" id="hidden-atividades">
 
             <div class="summary-box">
                 <div class="summary-item">
@@ -178,8 +185,9 @@
                     <i class="fa-solid fa-pen-to-square"></i> Alterar Alguma Coisa
                 </button>
             </div>
-        </form>
+        </div>
 
+        <!-- STEP 7: Sucesso -->
         <div class="step" id="step7">
             <div class="success-animation">🎉💞</div>
             <h2>Tudo pronto!</h2>
@@ -196,7 +204,7 @@
             </div>
         </div>
 
-    </div>
+    </form>
 
     <script src="script.js"></script>
 </body>
