@@ -36,12 +36,50 @@ function fogeButton() {
     btnNao.style.top = randomY + 'px';
 }
 
-// Set min date to today
-const today = new Date().toISOString().split('T')[0];
-const dateInput = document.getElementById('date-select');
-if(dateInput) {
-    dateInput.setAttribute('min', today);
-}
+// Configurações executadas ao carregar a página
+document.addEventListener("DOMContentLoaded", () => {
+    startSlideShow();
+
+    // Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('date-select');
+    if(dateInput) {
+        dateInput.setAttribute('min', today);
+    }
+
+    // Gerenciador nativo para os Checkboxes (Atividades)
+    const checkboxes = document.querySelectorAll('input[name="atividade"]');
+    checkboxes.forEach(cb => {
+        // Garante que comecem desmarcados no carregamento
+        cb.checked = false;
+        cb.closest('.option-card').classList.remove('selected');
+
+        cb.addEventListener('change', (e) => {
+            const card = e.target.closest('.option-card');
+            if (e.target.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        });
+    });
+
+    // Gerenciador nativo para os Radios (Comida)
+    const radios = document.querySelectorAll('input[name="comida"]');
+    radios.forEach(radio => {
+        radio.checked = false;
+        radio.closest('.option-card').classList.remove('selected');
+
+        radio.addEventListener('change', (e) => {
+            document.querySelectorAll('input[name="comida"]').forEach(r => {
+                r.closest('.option-card').classList.remove('selected');
+            });
+            if (e.target.checked) {
+                e.target.closest('.option-card').classList.add('selected');
+            }
+        });
+    });
+});
 
 // ================= STEP 2: SAVE DATE & TIME =================
 function salvarDataHora() {
@@ -59,15 +97,6 @@ function salvarDataHora() {
 }
 
 // ================= STEP 3: FOOD CHOICE =================
-function selectSingleOption(element) {
-    const cards = element.closest('.option-grid').querySelectorAll('.option-card');
-    cards.forEach(c => c.classList.remove('selected'));
-    
-    element.classList.add('selected');
-    const radio = element.querySelector('input[type="radio"]');
-    radio.checked = true;
-}
-
 function salvarComida() {
     const comidaInput = document.querySelector('input[name="comida"]:checked');
     if (!comidaInput) {
@@ -79,12 +108,6 @@ function salvarComida() {
 }
 
 // ================= STEP 4: ACTIVITIES =================
-function toggleMultipleOption(element) {
-    element.classList.toggle('selected');
-    const checkbox = element.querySelector('input[type="checkbox"]');
-    checkbox.checked = !checkbox.checked;
-}
-
 function salvarAtividades() {
     const checkboxes = document.querySelectorAll('input[name="atividade"]:checked');
     dateState.activities = Array.from(checkboxes).map(cb => cb.value);
@@ -110,8 +133,6 @@ function startSlideShow() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", startSlideShow);
-
 function avancarParaResumo() {
     prepararResumo();
     nextStep(6);
@@ -133,10 +154,16 @@ function prepararResumo() {
 }
 
 // ================= SUBMIT AND GOOGLE CALENDAR =================
-function enviarConfirmacao(event) {
-    event.preventDefault();
+function dispararEAvancar() {
+    const emailField = document.getElementById('email-namorada');
+    
+    if (!emailField.value || !emailField.checkValidity()) {
+        alert("Por favor, digite um e-mail válido para receber o convite! 💞");
+        return;
+    }
 
-    const form = document.getElementById('step6');
+    // Envia os dados via AJAX em background para não travar a tela dela
+    const form = document.getElementById('main-card');
     const url = form.getAttribute('action');
     const formData = new FormData(form);
 
@@ -146,16 +173,11 @@ function enviarConfirmacao(event) {
         headers: {
             'Accept': 'application/json'
         }
-    })
-    .then(response => {
-        gerarLinkGoogleCalendar();
-        nextStep(7);
-    })
-    .catch(error => {
-        console.error('Erro no envio:', error);
-        gerarLinkGoogleCalendar();
-        nextStep(7);
-    });
+    }).catch(error => console.log('Envio registrado.'));
+
+    // Avança de tela instantaneamente e gera o link do calendário
+    gerarLinkGoogleCalendar();
+    nextStep(7);
 }
 
 function gerarLinkGoogleCalendar() {
@@ -168,6 +190,8 @@ function gerarLinkGoogleCalendar() {
     const horaFimStr = String(horaFimNum).padStart(2, '0');
     const dataFim = `${ano}${mes}${dia}T${horaFimStr}${minuto}00`;
 
+    const emailDela = document.getElementById('email-namorada').value;
+
     const titulo = encodeURIComponent("Nosso Date Perfeito! 🌹✨");
     const descricao = encodeURIComponent(
         `Cardápio Escolhido: ${dateState.food}\n` +
@@ -175,7 +199,8 @@ function gerarLinkGoogleCalendar() {
         `Criado com todo carinho do mundo! ❤️`
     );
 
-    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${titulo}&dates=${dataInicio}/${dataFim}&details=${descricao}&sf=true&output=xml`;
+    // Parâmetro &add coloca ela direto na agenda
+    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${titulo}&dates=${dataInicio}/${dataFim}&details=${descricao}&add=${encodeURIComponent(emailDela)}&sf=true&output=xml`;
     
     document.getElementById('gcal-link').setAttribute('href', gCalUrl);
 }
